@@ -20,12 +20,12 @@ class BasketballsAPI:
     # getBasketballs()
     class _Read(Resource):
         def get(self):
-            return jsonify(getBasketball())
+            return jsonify(getBasketballs())
 
     # getBasketball(id)
     class _ReadID(Resource):
         def get(self, id):
-            return jsonify(getBasketballs(id))
+            return jsonify(getBasketball(id))
 
     # building RESTapi resources/interfaces, these routes are added to Web Server
     api.add_resource(_Create, '/create/<string:Basketball>')
