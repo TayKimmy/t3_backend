@@ -1,10 +1,10 @@
 version: '3'
 services:
         web:
-                image: flask_petite_pandas # Change the image name to something unique
+                image: flask_petite_pandas
                 build: .
                 ports:
-                        - "8777:8080" # Edit the number on the left to match the port you chose
+                        - "8777:8080"
                 volumes:
                         - ./volumes:/volumes
                         - ./instance:/instance
