@@ -17,6 +17,7 @@ from api.joke import joke_api # Blueprint import api definition
 from api.user import user_api # Blueprint import api definition
 from api.player import player_api
 from api.basketball import basketball_api
+from api.graph import graph_api
 
 
 # setup App pages
@@ -28,6 +29,7 @@ app.register_blueprint(covid_api) # register api routes
 app.register_blueprint(user_api) # register api routes
 app.register_blueprint(player_api)
 app.register_blueprint(basketball_api)
+app.register_blueprint(graph_api)
 app.register_blueprint(app_projects) # register app pages
 
 @app.errorhandler(404)  # catch for URL not found
