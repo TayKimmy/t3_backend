@@ -7,7 +7,7 @@ graph_api = Blueprint('graph_api', __name__, url_prefix='/api/graphs')
 api = Api(graph_api)
 
 # Read the Lakers CSV file
-df = pd.read_csv('lakers.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/TayKimmy/t3_backend/main/api/lakers.csv')
 
 class GraphAPI:
     # API method to get all Lakers data
@@ -29,11 +29,22 @@ class GraphAPI:
 # Serve the Lakers CSV file
 @graph_api.route('/csv')
 def serve_csv():
-    return send_file('lakers.csv', as_attachment=True)
+    return send_file('https://raw.githubusercontent.com/TayKimmy/t3_backend/main/api/lakers.csv', as_attachment=True)
 
 # Route to display data in a table
 @graph_api.route('/table')
 def display_table():
+    column_order = ['Player', 'GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
+
+    # Reorder the columns in the DataFrame
+    df_ordered = df[column_order]
+
+    # Convert the reordered DataFrame to a dictionary
+    data_dict = df_ordered.to_dict(orient='list')
+
+    # Create a new dictionary with the desired column order
+    reordered_dict = {column: data_dict[column] for column in column_order}
+
     return render_template_string(df.to_html())
 
 # Route to display data in a bar graph
