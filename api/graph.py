@@ -1,3 +1,5 @@
+# http://127.0.0.1:8086/api/graphs/
+
 from flask import Blueprint, jsonify, send_file, render_template_string
 from flask_restful import Api, Resource
 import pandas as pd
