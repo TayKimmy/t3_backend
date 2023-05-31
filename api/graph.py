@@ -87,7 +87,7 @@ def display_table(team_name):
     df = pd.read_csv(csv_url)
     column_order = ['Player', 'GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
     df_ordered = df[column_order]
-    return render_template_string(df_ordered.to_html())
+    return render_template_string(df_ordered.to_html(columns=column_order, index=False))
 
 # Route to display data in a bar graph
 @graph_api.route('/bar_graph/<string:team_name>')
