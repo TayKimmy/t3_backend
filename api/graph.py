@@ -85,7 +85,7 @@ def serve_csv(team_name):
 def display_table(team_name):
     csv_url = f'https://raw.githubusercontent.com/TayKimmy/t3_backend/main/api/{team_name}.csv'
     df = pd.read_csv(csv_url)
-    column_order = ['Player', 'Team', 'GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
+    column_order = ['Player', 'GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
     df_ordered = df[column_order]
     return render_template_string(df_ordered.to_html())
 
