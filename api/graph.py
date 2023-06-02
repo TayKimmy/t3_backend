@@ -12,6 +12,7 @@ api = Api(graph_api)
 # Function to read CSV file and convert it to JSON
 def read_csv_file(file_url):
     df = pd.read_csv(file_url)
+    # return df.to_dict("index")
     return df.to_dict()
 
 class GraphAPI:
@@ -83,30 +84,60 @@ def serve_csv(team_name):
 # Route to display data in a table
 @graph_api.route('/table/<string:team_name>')
 def display_table(team_name):
+    print("graphs display_table", team_name)
     csv_url = f'https://raw.githubusercontent.com/TayKimmy/t3_backend/main/api/{team_name}.csv'
+    #print("2")
     df = pd.read_csv(csv_url)
-    column_order = ['Player', 'GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
-    df_ordered = df.reindex(columns=column_order)
-    return render_template_string(df_ordered.to_html(index=False))
+    #df.to_dict("index")
+    #print("3")
+    new_order = [0,1,2,3,4,5,6,7,8]
+    #print(df[df.columns[new_order]]) 
+    df_ordered = df[df.columns[new_order]]
+    #column_order = ['Player', 'Team', 'GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
+    #df_ordered = df[column_order]
+    #print(df_ordered)
+    return render_template_string(df_ordered.to_html())
+
 
 # Route to display data in a bar graph
-@graph_api.route('/bar_graph/<string:team_name>')
-def display_bar_graph(team_name):
+#@graph_api.route('/bar_graph/<string:team_name>')
+@graph_api.route('/bar_graph/<string:team_name>/<string:aspects>')
+
+def display_bar_graph(team_name, aspects):
+    print("bar graph api")
+    print(aspects)
+    #team_name = request.json.get('team_name')
+    # aspects = request.json.get('aspects')
+    print(team_name)
+    print(aspects)
     csv_url = f'https://raw.githubusercontent.com/TayKimmy/t3_backend/main/api/{team_name}.csv'
     df = pd.read_csv(csv_url)
-    aspects = ['Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
+
+    cols = ['Player','GP', 'Points', 'Assists', 'Rebounds', 'Steals', 'Blocks', 'FG%', '3PT%']
+    pindex = cols.index('Player')
+    aindex = cols.index(aspects)
+    print(pindex,aindex)
+    #plt.figure(figsize=(10, 6))
+    # aspects = ['Points']
     plt.figure(figsize=(10, 6))
-    for aspect in aspects:
-        plt.bar(df['Player'], df[aspect], label=aspect)
+    print(pindex)
+    print(aindex)
+    plt.bar(df[df.columns[pindex]], df[df.columns[aindex]], label=aspects)
+    # for aspect in aspects:
+        # print(df)
+        # print(df[cols.index('Player')])
+        # print(df[cols.index(aspect)])
+        # plt.bar(df[cols.index('Player')], df[cols.index(aspect)], label=aspect)
+        # plt.bar(df['Player'], df[aspect], label=aspect)
     plt.xlabel('Player')
     plt.ylabel('Value')
     plt.title(f'Player Performance - {team_name.capitalize()}')
-    plt.xticks(rotation=90)
+    plt.xticks(rotation=45)
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f'bar_graph_{team_name}.png')
+    plt.savefig(f'bar_graph_{team_name}_{aspects}.png')
     plt.close()
-    return send_file(f'bar_graph_{team_name}.png', mimetype='image/png')
+    return send_file(f'bar_graph_{team_name}_{aspects}.png', mimetype='image/png')
 
 # Route to display data in a pie graph
 @graph_api.route('/pie_graph/<string:team_name>')
@@ -124,5 +155,6 @@ def display_pie_graph(team_name):
     return send_file(f'pie_graph_{team_name}_{aspects[-1]}.png', mimetype='image/png')
 
 
-if __name__ == '__main__':
+if __name__ == '_main_':
     graph_api.run()
+    #display_table('bulls')
