@@ -44,7 +44,19 @@ class TimeAPI:
             times = Time.query.all()    # read/extract all scores from database
             json_ready = [time.read() for time in times]  # prepare output in json
             return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
+    
+    class _Delete(Resource):
+        def delete(self):
+            body = request.get_json()
+            id = body.get('id')
+            print("inside review.py delete id", id)
+            time=Time.delete(id)
+            if time:
+                times = Time.query.all()    # read/extract all reviews from database
+                json_ready = [time.read() for time in times]  # prepare output in json
+                return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps   
 
     # building RESTapi endpoint
     api.add_resource(_Create, '/create')
     api.add_resource(_Read, '/')
+    api.add_resource(_Delete, '/delete')
