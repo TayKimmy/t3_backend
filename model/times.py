@@ -82,6 +82,21 @@ class Time(db.Model):
             "totaltime":self.totaltime,
             "uid": self.uid            
         }
+    
+    def delete(id):
+        # print("inside reviews.py delete", id) 
+        try:
+            entry = db.session.query(Time).get(id)
+            if entry: 
+                db.session.delete(entry)
+                db.session.commit()
+                print("deleted record", entry)                
+                return None
+            else:
+                return {"error": "entry not found"}, 404                
+        except Exception as e:
+            db.session.rollback()
+            return {"error": f"server error: {e}"}, 500
 
 # Builds working data for testing
 def initTimes():
